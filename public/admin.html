@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Gerenciador FashionDicas</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .admin-container { max-width: 850px; margin: 50px auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #ff85a2; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        textarea { height: 120px; resize: vertical; }
+        
+        /* Botões */
+        .btn-post { background: #ff85a2; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; width: 100%; margin-top: 20px; font-weight: bold;}
+        .btn-post:hover { background: #ff5c84; transform: translateY(-2px); }
+        .btn-cancel { background: #eee; color: #666; border: none; padding: 10px; border-radius: 8px; width: 100%; margin-top: 10px; cursor: pointer; display: none; }
+        
+        /* Lista de Gerenciamento */
+        .manage-section { margin-top: 50px; border-top: 3px solid #ffeff2; padding-top: 30px; }
+        .post-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; background: #fafafa; margin-bottom: 10px; border-radius: 8px; }
+        .post-info { flex-grow: 1; }
+        .post-info strong { color: #333; font-size: 1.1rem; }
+        .post-info small { color: #ff85a2; font-weight: bold; text-transform: uppercase; }
+        
+        .post-actions button { margin-left: 10px; padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
+        .btn-edit { background: #4da3ff; color: white; }
+        .btn-delete { background: #ff4d4d; color: white; }
+        .status-msg { margin-top: 20px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h2 id="formTitle" style="text-align: center; color: #333;">Postar Novo Conteúdo</h2>
+        <p style="text-align: center; color: #999;">Preencha os campos abaixo para criar ou atualizar um post.</p>
+
+        <form id="postForm">
+            <input type="hidden" id="postId"> 
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Categoria:</label>
+                    <select id="category" required>
+                        <option value="vestidos">Vestidos</option>
+                        <option value="lingerie">Lingerie</option>
+                        <option value="biquini">Biquíni</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Título:</label>
+                    <input type="text" id="title" placeholder="Título do post" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Subtítulo:</label>
+                <input type="text" id="subtitle" placeholder="Resumo curto para a lista" required>
+            </div>
+
+            <div style="background: #fff5f7; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <label style="text-align: center; display: block; font-size: 1.1rem; margin-bottom: 15px;">Galeria de Imagens (4 URLs obrigatórias)</label>
+                <div class="form-row">
+                    <input type="url" id="img1" placeholder="URL Foto 1 (Capa)" required>
+                    <input type="url" id="img2" placeholder="URL Foto 2" required>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <input type="url" id="img3" placeholder="URL Foto 3" required>
+                    <input type="url" id="img4" placeholder="URL Foto 4" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Conteúdo Completo:</label>
+                <textarea id="content" placeholder="Escreva o artigo completo aqui..." required></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-post">Publicar no Blog</button>
+            <button type="button" id="cancelBtn" class="btn-cancel" onclick="resetForm()">Cancelar Edição</button>
+            
+            <div id="status" class="status-msg"></div>
+        </form>
+
+        <div class="manage-section">
+            <h3 style="text-align: center; color: #333; margin-bottom: 20px;">Gerenciar Posts Existentes</h3>
+            <div id="postsList">
+                <p style="text-align: center; color: #ccc;">Carregando posts do banco de dados...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const postForm = document.getElementById('postForm');
+        const postsList = document.getElementById('postsList');
+        const submitBtn = document.getElementById('submitBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const formTitle = document.getElementById('formTitle');
+
+        // 1. CARREGAR LISTA (READ)
+        async function loadPosts() {
+            try {
+                const res = await fetch('/api/posts');
+                const posts = await res.json();
+                
+                if (posts.length === 0) {
+                    postsList.innerHTML = "<p style='text-align: center;'>Nenhum post encontrado no banco.</p>";
+                    return;
+                }
+
+                postsList.innerHTML = posts.map(p => `
+                    <div class="post-item">
+                        <div class="post-info">
+                            <small>${p.category}</small><br>
+                            <strong>${p.title}</strong>
+                        </div>
+                        <div class="post-actions">
+                            <button class="btn-edit" onclick="editPost(${JSON.stringify(p).replace(/"/g, '&quot;')})">Editar</button>
+                            <button class="btn-delete" onclick="deletePost(${p.id})">Excluir</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                postsList.innerHTML = "<p style='color: red; text-align: center;'>Erro ao conectar com o servidor.</p>";
+            }
+        }
+
+        // 2. PREPARAR EDIÇÃO (UPDATE - Parte 1)
+        function editPost(post) {
+            formTitle.innerText = "Editando Conteúdo";
+            submitBtn.innerText = "Salvar Alterações";
+            submitBtn.style.background = "#4da3ff";
+            cancelBtn.style.display = "block";
+            
+            document.getElementById('postId').value = post.id;
+            document.getElementById('title').value = post.title;
+            document.getElementById('subtitle').value = post.subtitle;
+            document.getElementById('category').value = post.category;
+            document.getElementById('content').value = post.content;
+            document.getElementById('img1').value = post.gallery_images[0] || '';
+            document.getElementById('img2').value = post.gallery_images[1] || '';
+            document.getElementById('img3').value = post.gallery_images[2] || '';
+            document.getElementById('img4').value = post.gallery_images[3] || '';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 3. RESETAR FORMULÁRIO
+        function resetForm() {
+            postForm.reset();
+            document.getElementById('postId').value = "";
+            formTitle.innerText = "Postar Novo Conteúdo";
+            submitBtn.innerText = "Publicar no Blog";
+            submitBtn.style.background = "#ff85a2";
+            cancelBtn.style.display = "none";
+        }
+
+        // 4. EXCLUIR (DELETE)
+        async function deletePost(id) {
+            if(confirm('Deseja realmente apagar este post permanentemente?')) {
+                await fetch(`/api/posts/${id}`, { method: 'DELETE' });
+                loadPosts();
+            }
+        }
+
+        // 5. SUBMIT (CREATE & UPDATE - Parte 2)
+        postForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('postId').value;
+            
+            const galleryArray = [
+                document.getElementById('img1').value,
+                document.getElementById('img2').value,
+                document.getElementById('img3').value,
+                document.getElementById('img4').value
+            ];
+
+            const postData = {
+                title: document.getElementById('title').value,
+                subtitle: document.getElementById('subtitle').value,
+                category: document.getElementById('category').value,
+                content: document.getElementById('content').value,
+                image_url: galleryArray[0],
+                gallery_images: galleryArray
+            };
+
+            const url = id ? `/api/posts/${id}` : '/api/posts';
+            const method = id ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(postData)
+                });
+
+                if (response.ok) {
+                    alert(id ? 'Post atualizado!' : 'Post criado!');
+                    resetForm();
+                    loadPosts();
+                }
+            } catch (err) {
+                alert('Erro ao salvar post.');
+            }
+        });
+
+        loadPosts();
+    </script>
+</body>
+</html>

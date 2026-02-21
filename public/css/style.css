@@ -1,0 +1,249 @@
+:root {
+    --primary: #ff85a2;
+    --dark: #333;
+    --light: #fff5f7;
+    --white: #ffffff;
+    --gray: #777;
+}
+
+* { box-sizing: border-box; }
+
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    margin: 0; 
+    background: var(--light); 
+    color: var(--dark); 
+    line-height: 1.6;
+}
+
+/* Header */
+header { background: var(--white); padding: 15px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.top-nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.logo { font-size: 24px; font-weight: bold; text-transform: uppercase; }
+.logo span { color: var(--primary); }
+nav a { margin-left: 15px; text-decoration: none; color: var(--dark); font-weight: 500; transition: 0.3s; }
+nav a:hover { color: var(--primary); }
+
+.header-banner { text-align: center; padding: 40px 20px; }
+.header-banner h1 { font-size: clamp(1.8rem, 5vw, 3rem); color: var(--dark); margin: 0; }
+
+/* Layout Principal */
+.container { 
+    display: grid; 
+    grid-template-columns: 280px 1fr; 
+    gap: 30px; 
+    padding: 30px 5%; 
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Sidebar e Menu Categorias */
+.sidebar { background: var(--white); padding: 20px; border-radius: 15px; height: fit-content; position: sticky; top: 20px; }
+.search-box { display: flex; margin-bottom: 25px; }
+.search-box input { border: 1px solid #ddd; padding: 10px; border-radius: 5px 0 0 5px; width: 100%; outline: none; }
+.search-box button { background: var(--primary); border: none; color: white; padding: 10px 15px; border-radius: 0 5px 5px 0; cursor: pointer; }
+
+.category-menu { list-style: none; padding: 0; margin: 0; }
+.cat-item { border-bottom: 1px solid #eee; overflow: hidden; }
+.cat-title { 
+    padding: 15px 10px; 
+    cursor: pointer; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.cat-title:hover { color: var(--primary); }
+
+.sub-menu { 
+    display: none; 
+    list-style: none; 
+    padding: 0 0 15px 15px; 
+    background: #fff;
+}
+.sub-menu li a { 
+    font-size: 14px; 
+    color: var(--gray); 
+    text-decoration: none; 
+    display: block; 
+    padding: 8px 0;
+}
+.sub-menu li a:hover { color: var(--primary); }
+
+.cat-item.active .sub-menu { display: block; }
+.cat-item.active .cat-title { color: var(--primary); }
+.cat-item.active .fa-chevron-down { transform: rotate(180deg); }
+
+/* Blog Posts - ESTILIZAÇÃO CORRIGIDA */
+.post-card { background: var(--white); padding: 25px; border-radius: 15px; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+.post-title { text-align: center; font-size: 2.2rem; margin-top: 0; font-weight: 800; color: var(--dark); }
+.post-subtitle { text-align: center; color: var(--primary); font-style: italic; font-size: 1.1rem; margin-bottom: 25px; }
+
+/* Ajuste das Imagens para não ficarem gigantes */
+.main-img { 
+    width: 100%; 
+    max-height: 500px; /* Limita a altura para não sumir da tela */
+    object-fit: cover; /* Mantém a proporção sem achatar a foto */
+    border-radius: 10px; 
+    display: block;
+    margin: 0 auto 25px auto;
+}
+
+.post-description { font-size: 1.1rem; color: #444; margin-bottom: 30px; text-align: justify; }
+
+/* Layout Lado a Lado (Texto e Imagem) */
+.split-section { display: flex; align-items: center; gap: 30px; margin: 40px 0; }
+.split-section img { 
+    width: 45%; 
+    max-height: 400px; 
+    border-radius: 10px; 
+    object-fit: cover; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.split-section .text-box { width: 55%; }
+.split-section.reverse { flex-direction: row-reverse; }
+
+/* Carrossel Prev/Next Estilizado */
+.slider-container { 
+    position: relative; 
+    width: 100%; 
+    max-width: 800px; 
+    margin: 50px auto; 
+    border-radius: 15px; 
+    overflow: hidden; 
+}
+.slider-img { 
+    width: 100%; 
+    height: 500px; 
+    object-fit: cover; 
+    transition: opacity 0.3s ease; /* Para a troca suave no JS */
+}
+.slider-img.active { display: block; animation: fadeIn 0.5s; }
+
+.slider-controls { 
+    position: absolute; 
+    top: 50%; 
+    width: 100%; 
+    display: flex; 
+    justify-content: space-between; 
+    transform: translateY(-50%); 
+    padding: 0 15px;
+    z-index: 5;
+}
+.slider-controls button { 
+    background: rgba(255, 133, 162, 0.7); 
+    border: none; 
+    color: white; 
+    padding: 12px 18px; 
+    border-radius: 50%; 
+    cursor: pointer; 
+    transition: 0.3s;
+}
+.slider-controls button:hover { background: var(--primary); }
+
+.carousel-counter {
+    text-align: center;
+    margin-top: 10px;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+/* Espaço Adsense */
+.ads-space { 
+    width: 100%; 
+    height: 100px; 
+    background: #f9f9f9; 
+    border: 1px dashed #ddd; 
+    margin: 30px 0; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #bbb;
+    font-size: 0.8rem;
+}
+
+/* Rodapé */
+footer { 
+    background: var(--white); 
+    padding: 40px 20px; 
+    margin-top: 50px; 
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+.footer-content { max-width: 1200px; margin: 0 auto; }
+.socials { margin-top: 15px; }
+.socials i { font-size: 24px; margin: 0 10px; color: var(--dark); cursor: pointer; transition: 0.3s; }
+.socials i:hover { color: var(--primary); }
+
+@keyframes fadeIn { from { opacity: 0.4; } to { opacity: 1; } }
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 992px) {
+    .container { grid-template-columns: 1fr; }
+    .sidebar { position: static; margin-bottom: 30px; }
+    .header-banner h1 { font-size: 2.2rem; }
+}
+
+@media (max-width: 600px) {
+    .top-nav { flex-direction: column; gap: 15px; }
+    nav a { margin: 0 10px; }
+    .split-section, .split-section.reverse { flex-direction: column; }
+    .split-section img { width: 100%; }
+    .split-section .text-box { width: 100%; }
+    .post-card { padding: 15px; }
+    .post-title { font-size: 1.5rem; }
+    .slider-img { height: 300px; }
+}
+
+/*Sobre*/
+.about-section .post-description p {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+.about-section .logo {
+    letter-spacing: 2px;
+}
+
+
+/*Botão de carregamento após 12 postagens*/
+/* --- ESTILIZAÇÃO DO BOTÃO "VER MAIS" --- */
+.load-more-style {
+    display: block;
+    margin: 50px auto; /* Centraliza e dá espaço dos posts */
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #ff4d6d, #c71585); /* Degradê luxuoso */
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 50px; /* Botão arredondado moderno */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(199, 21, 133, 0.3);
+    outline: none;
+}
+
+.load-more-style:hover {
+    background: linear-gradient(135deg, #c71585, #ff4d6d);
+    transform: translateY(-3px); /* Efeito de levante */
+    box-shadow: 0 6px 20px rgba(199, 21, 133, 0.5);
+}
+
+.load-more-style:active {
+    transform: translateY(1px); /* Feedback de clique */
+}
+
+/* Responsividade para celulares */
+@media (max-width: 768px) {
+    .load-more-style {
+        width: 80%; /* Botão maior no celular para facilitar o toque */
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+}

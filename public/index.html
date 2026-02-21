@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Dicas | Elegância e Empoderamento</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,600;0,800;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="top-nav">
+            <div class="logo">Fashion<span>Dicas</span></div>
+            <nav id="main-nav">
+                <a href="#" onclick="event.preventDefault(); fetchPosts();">Home</a>
+                <a href="#" onclick="event.preventDefault(); showAbout();">Sobre</a>
+                <a href="#" onclick="event.preventDefault(); showDicas();">Dicas</a>
+            </nav>
+        </div>
+        <div class="header-banner">
+            <h1>Sinta-se Empoderada em Cada Look</h1>
+            <p class="hero-text">Tendências exclusivas para mulheres que não têm medo de brilhar.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <aside class="sidebar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="O que você procura?">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
+
+            <ul class="category-menu">
+                <li class="cat-item" data-category="vestidos">
+                    <div class="cat-title">
+                        Vestidos <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('vestidos')">Todos os Vestidos</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Vestido de Noiva')">Vestido de Noiva</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Vestido Debutante')">Vestido Debutante</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Vestido Verão')">Vestido Verão</a></li>
+                    </ul>
+                </li>
+
+                <li class="cat-item" data-category="lingerie">
+                    <div class="cat-title">
+                        Lingerie <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('lingerie')">Toda Lingerie</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Lingerie de Onça')">Lingerie de Onça</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Lingerie de Médica')">Lingerie de Médica</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Lingerie Transparente')">Lingerie Transparente</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Mulher Gato')">Lingerie de Mulher Gato</a></li>
+                    </ul>
+                </li>
+
+                <li class="cat-item" data-category="biquini">
+                    <div class="cat-title">
+                        Biquíni <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('biquini')">Todos os Biquínis</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Biquíni Sensual')">Biquíni Sensual</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Biquíni Transparente')">Biquíni Transparente</a></li>
+                        <li><a href="#" onclick="event.stopPropagation(); fetchPosts('Fio Dental')">Biquíni Fio Dental</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <section id="content-area" class="blog-content">
+            </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">Fashion<span>Dicas</span></div>
+            <p>&copy; 2026 Fashion Dicas - Guia de Estilo e Sensualidade Feminina</p>
+            <p><small>Conteúdo exclusivo para mulheres.</small></p>
+            <div class="socials">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-pinterest"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
